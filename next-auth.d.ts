@@ -7,12 +7,14 @@ declare module "next-auth" {
             id: string;
             role: "CLIENT" | "FREELANCER" | "ADMIN";
             bio?: string;
+            phone?: string;
         } & DefaultSession["user"];
     }
 
     interface User {
         role: "CLIENT" | "FREELANCER" | "ADMIN";
         bio?: string;
+        phone?: string;
     }
 }
 
@@ -20,5 +22,6 @@ declare module "next-auth/jwt" {
     interface JWT {
         role?: "CLIENT" | "FREELANCER" | "ADMIN";
         bio?: string;
+        phone?: string;
     }
 }

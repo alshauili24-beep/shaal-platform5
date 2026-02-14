@@ -36,18 +36,23 @@ export const authConfig = {
       if (token.bio && session.user) {
         session.user.bio = token.bio as string;
       }
+      if (token.phone && session.user) {
+        session.user.phone = token.phone as string;
+      }
       return session;
     },
     async jwt({ token, user, trigger, session }) {
       if (user) {
         token.role = user.role;
         token.bio = user.bio;
+        token.phone = user.phone;
       }
       // Support updating session client-side
       if (trigger === "update" && session?.user) {
         token.role = session.user.role;
         // Allow updating bio via session update
         if (session.user.bio) token.bio = session.user.bio;
+        if (session.user.phone) token.phone = session.user.phone;
       }
       return token;
     },
