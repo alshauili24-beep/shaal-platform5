@@ -98,24 +98,31 @@ export async function getAdminStats() {
         totalUsers,
         totalProjects,
         totalRevenue: transactions._sum.amount || 0,
-        activeFreelancers: await prisma.user.count({ where: { role: "FREELANCER" } }),
-    };
-}
+        const proposalsCount = await prisma.proposal.count();
 
-export async function getAdminData() {
-    await checkAdmin();
+        return {
+            usersCount: totalUsers,
+            projectsCount: totalProjects,
+            proposalsCount,
+            // totalRevenue: transactions._sum.amount || 0,
+            // activeFreelancers: await prisma.user.count({ where: { role: "FREELANCER" } }),
+        };
+    }
 
-    const users = await prisma.user.findMany({
-        take: 5,
-        orderBy: { createdAt: "desc" },
-        select: { id: true, name: true, email: true, role: true, image: true, createdAt: true }
-    });
+    export async function getAdminData() {
+        await checkAdmin();
 
-    const projects = await prisma.project.findMany({
-        take: 5,
-        orderBy: { createdAt: "desc" },
-        include: { client: { select: { name: true } } }
-    });
+        const users = await prisma.user.findMany({
+            take: 5,
+            orderBy: { createdAt: "desc" },
+            select: { id: true, name: true, email: true, role: true, image: true, createdAt: true }
+        });
 
-    return { users, projects };
-}
+        const projects = await prisma.project.findMany({
+            take: 5,
+            orderBy: { createdAt: "desc" },
+            include: { client: { select: { name: true } } }
+        });
+
+        return { users, projects };
+    }
