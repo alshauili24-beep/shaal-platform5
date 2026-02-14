@@ -88,7 +88,7 @@ export default function AdminUsersPage() {
                                         <div>
                                             <div className="font-bold flex items-center gap-2">
                                                 {user.name}
-                                                {user.isVerified && <CheckCircle className="w-3 h-3 text-blue-400" title="Verified" />}
+                                                {user.isVerified && <CheckCircle className="w-3 h-3 text-blue-400" />}
                                             </div>
                                             <div className="text-xs text-white/40">{user.email}</div>
                                         </div>
