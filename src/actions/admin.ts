@@ -87,6 +87,7 @@ export async function getAdminStats() {
 
     const totalUsers = await prisma.user.count();
     const totalProjects = await prisma.project.count();
+    const proposalsCount = await prisma.proposal.count();
 
     // Calculate total revenue (simulated from Transactions)
     const transactions = await prisma.transaction.aggregate({
@@ -95,34 +96,28 @@ export async function getAdminStats() {
     });
 
     return {
-        totalUsers,
-        totalProjects,
-        totalRevenue: transactions._sum.amount || 0,
-        const proposalsCount = await prisma.proposal.count();
+        usersCount: totalUsers,
+        projectsCount: totalProjects,
+        proposalsCount,
+        // totalRevenue: transactions._sum.amount || 0,
+        // activeFreelancers: await prisma.user.count({ where: { role: "FREELANCER" } }),
+    };
+}
 
-        return {
-            usersCount: totalUsers,
-            projectsCount: totalProjects,
-            proposalsCount,
-            // totalRevenue: transactions._sum.amount || 0,
-            // activeFreelancers: await prisma.user.count({ where: { role: "FREELANCER" } }),
-        };
-    }
+export async function getAdminData() {
+    await checkAdmin();
 
-    export async function getAdminData() {
-        await checkAdmin();
+    const users = await prisma.user.findMany({
+        take: 5,
+        orderBy: { createdAt: "desc" },
+        select: { id: true, name: true, email: true, role: true, image: true, createdAt: true }
+    });
 
-        const users = await prisma.user.findMany({
-            take: 5,
-            orderBy: { createdAt: "desc" },
-            select: { id: true, name: true, email: true, role: true, image: true, createdAt: true }
-        });
+    const projects = await prisma.project.findMany({
+        take: 5,
+        orderBy: { createdAt: "desc" },
+        include: { client: { select: { name: true } } }
+    });
 
-        const projects = await prisma.project.findMany({
-            take: 5,
-            orderBy: { createdAt: "desc" },
-            include: { client: { select: { name: true } } }
-        });
-
-        return { users, projects };
-    }
+    return { users, projects };
+}
