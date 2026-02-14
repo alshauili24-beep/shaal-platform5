@@ -72,7 +72,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                         // Cast role to match NextAuth type
                         return {
                             ...user,
-                            role: user.role as "CLIENT" | "FREELANCER" | "ADMIN"
+                            role: user.role as "CLIENT" | "FREELANCER" | "ADMIN",
+                            bio: user.bio || undefined,
+                            phone: user.phone || undefined,
                         };
                     }
                 }
