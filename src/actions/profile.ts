@@ -11,7 +11,6 @@ export async function getPublicUserProfile(userId: string) {
             role: true,
             rating: true,
             completedJobs: true,
-            completedJobs: true,
             createdAt: true,
             bio: true,
             // email: false, // Don't expose email publicly ideally, or mask it
