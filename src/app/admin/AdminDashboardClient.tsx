@@ -1,7 +1,7 @@
 "use client";
 
 import { useLang } from "@/components/LanguageProvider";
-import { SignOutButton } from "@/components/AuthButtons"; // Ensure this exists or use a local button
+// import { SignOutButton } from "@/components/AuthButtons"; // Unused
 import Link from "next/link";
 
 interface AdminDashboardProps {
