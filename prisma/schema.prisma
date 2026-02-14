@@ -1,0 +1,194 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  password      String?
+  role          String    // "CLIENT" | "FREELANCER" | "ADMIN"
+  phone         String?
+  image         String?
+  bio           String?
+  
+  isVerified    Boolean   @default(false)
+  isBanned      Boolean   @default(false)
+  
+  // Client specific
+  projects      Project[]
+
+  // Freelancer specific
+  proposals     Proposal[]
+  portfolio     PortfolioItem[]
+  rating        Float?     @default(0)
+  completedJobs Int        @default(0)
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Messaging
+  conversations ConversationUser[]
+  messages      Message[]
+  notifications Notification[]
+  transactions  Transaction[]
+  serviceRequests ServiceRequest[]
+  complaints    Complaint[]
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  service     String   // "design", "marketing", "dev", "video"
+  budget      String
+  deadline    String
+  details     String
+  status      String   // "open", "in_progress", "done"
+  
+  clientId    String
+  client      User     @relation(fields: [clientId], references: [id])
+  
+  assignedTo  String?
+  
+  proposals   Proposal[]
+  milestones  Milestone[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Proposal {
+  id          String   @id @default(cuid())
+  price       String
+  coverLetter String?
+  
+  status      String   @default("pending") // "pending", "accepted", "rejected"
+
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  freelancerId String
+  freelancer   User    @relation(fields: [freelancerId], references: [id])
+
+  createdAt   DateTime @default(now())
+}
+
+model PortfolioItem {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  imageUrl    String?
+  videoUrl    String?
+  attachmentUrl String?
+  
+  freelancerId String
+  freelancer   User    @relation(fields: [freelancerId], references: [id])
+
+  createdAt   DateTime @default(now())
+}
+
+model Conversation {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  messages  Message[]
+  users     ConversationUser[]
+}
+
+model ConversationUser {
+   id             String @id @default(cuid())
+   conversationId String
+   userId         String
+   
+   user           User   @relation(fields: [userId], references: [id])
+   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+   
+   @@unique([userId, conversationId])
+}
+
+model Message {
+  id             String   @id @default(cuid())
+  content        String
+  senderId       String
+  conversationId String
+  createdAt      DateTime @default(now())
+  read           Boolean  @default(false)
+
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         User     @relation(fields: [senderId], references: [id])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String   // "message", "proposal_accepted", "proposal_rejected", "system"
+  title     String
+  content   String
+  link      String?  // URL to redirect on click
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Milestone {
+  id        String   @id @default(cuid())
+  title     String
+  amount    Float
+  status    String   // "pending", "funded", "completed", "paid"
+  dueDate   DateTime?
+  
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Transaction {
+  id        String   @id @default(cuid())
+  amount    Float
+  type      String   // "deposit", "payout"
+  status    String   // "success", "failed", "pending"
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  
+  milestoneId String?
+  // milestone Milestone? ...
+  
+  createdAt DateTime @default(now())
+}
+
+model ServiceRequest {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  service   String
+  budget    String
+  timeline  String
+  brief     String
+  status    String   @default("pending") // "pending", "contacted", "rejected"
+  
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model Complaint {
+  id        String   @id @default(cuid())
+  content   String
+  status    String   @default("pending") // "pending", "contacted"
+  
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+}
