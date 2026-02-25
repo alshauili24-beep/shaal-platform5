@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import { SessionProvider } from "@/components/SessionProvider";
+import { auth } from "@/auth";
 
 export const metadata: Metadata = {
   title: "SHAAL | شعل للحلول الذكية",

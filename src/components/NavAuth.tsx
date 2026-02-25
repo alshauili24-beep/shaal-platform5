@@ -90,10 +90,10 @@ export default function NavAuth() {
           {initials}
         </div>
 
-        {/* Name (hide on very small) */}
-        <div className="hidden xs:block text-left">
-          <div className="text-[10px] md:text-sm font-semibold leading-3 md:leading-4 max-w-[80px] md:max-w-[120px] truncate">{displayName}</div>
-          <div className="text-[9px] md:text-[11px] text-white/60">
+        {/* Name (Visible on mobile, just smaller) */}
+        <div className="text-left">
+          <div className="text-[10px] md:text-sm font-semibold leading-3 md:leading-4 max-w-[70px] xs:max-w-[100px] md:max-w-[120px] truncate">{displayName}</div>
+          <div className="text-[8px] md:text-[11px] text-white/60">
             {user.role?.toUpperCase() === "CLIENT" ? t("عميل", "Client") :
               user.role?.toUpperCase() === "FREELANCER" ? t("فريلانسر", "Freelancer") :
                 user.role?.toUpperCase() === "ADMIN" ? t("مدير", "Admin") : user.role}

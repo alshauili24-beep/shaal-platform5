@@ -195,7 +195,20 @@ export default function Navbar() {
                       </Link>
                     ))}
 
-                    {/* ... other items ... */}
+                    {/* Get Started button (if NOT on dashboard) */}
+                    {!pathname.startsWith("/dashboard") && (
+                      <Link
+                        href="/#request"
+                        onClick={(e) => handleNavClick(e, "#request")}
+                        className="mt-1 block w-full text-center rounded-xl px-3 py-2 text-sm font-semibold text-black"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, var(--shaal-orange), var(--shaal-orange2))",
+                        }}
+                      >
+                        {t("ابدأ الآن", "Get Started")}
+                      </Link>
+                    )}
                   </div>
                 </div>
               </div>
