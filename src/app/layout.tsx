@@ -19,11 +19,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const session = await auth();
+
   return (
     <html suppressHydrationWarning>
       <body>
-        <SessionProvider>
+        <SessionProvider session={session}>
           <LanguageProvider>{children}</LanguageProvider>
         </SessionProvider>
       </body>

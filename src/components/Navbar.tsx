@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useLang } from "@/components/LanguageProvider";
+import { useSession } from "next-auth/react";
 import NavAuth from "@/components/NavAuth";
 import NotificationBell from "@/components/NotificationBell";
 
@@ -18,6 +19,7 @@ type NavItem = {
 
 export default function Navbar() {
   const { lang, setLang, t } = useLang();
+  const { data: session, status } = useSession();
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -133,18 +135,18 @@ export default function Navbar() {
                 {/* Notification Bell */}
                 <NotificationBell />
 
-                {/* Auth buttons */}
+                {/* Auth buttons & User Profile */}
                 <NavAuth />
 
-                {/* Mobile button */}
+                {/* Mobile Dash menu or main menu button */}
                 <button
                   type="button"
                   onClick={() => setOpen((v) => !v)}
-                  className="md:hidden rounded-xl px-3 py-2 bg-white/10 border border-white/15 hover:bg-white/15 transition"
+                  className="md:hidden rounded-xl px-3 py-2 bg-white/10 border border-white/15 hover:bg-white/15 transition flex flex-col gap-1 items-center justify-center"
                   aria-label="Open menu"
                 >
-                  <span className="block w-5 h-[2px] bg-white/80 mb-1" />
-                  <span className="block w-5 h-[2px] bg-white/80 mb-1" />
+                  <span className="block w-5 h-[2px] bg-white/80" />
+                  <span className="block w-5 h-[2px] bg-white/80" />
                   <span className="block w-5 h-[2px] bg-white/80" />
                 </button>
               </div>
@@ -153,9 +155,34 @@ export default function Navbar() {
 
             {/* Mobile menu */}
             {open && (
-
               <div className="md:hidden px-4 pb-4 pt-3">
-                <div className="rounded-2xl border border-white/10 bg-black/25 p-3">
+                <div className="rounded-2xl border border-white/10 bg-black/25 p-3 shadow-2xl">
+                  {/* Dashboard Links (if on dash) */}
+                  {pathname.startsWith("/dashboard") && (
+                    <div className="mb-4 space-y-2 border-b border-white/10 pb-4">
+                      <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest px-3 mb-2">
+                        {t("قائمة لوحة التحكم", "Dashboard Menu")}
+                      </div>
+                      {/* Inject Role-based Links */}
+                      {status === "authenticated" && session?.user?.role === "CLIENT" && (
+                        <div className="flex flex-col gap-1">
+                          <Link href="/dashboard/client" onClick={() => setOpen(false)} className="px-3 py-2 text-sm text-white/70 hover:text-white transition">{t("نظرة عامة", "Overview")}</Link>
+                          <Link href="/dashboard/client/requests" onClick={() => setOpen(false)} className="px-3 py-2 text-sm text-white/70 hover:text-white transition">{t("طلباتي", "My Requests")}</Link>
+                          <Link href="/dashboard/client/messages" onClick={() => setOpen(false)} className="px-3 py-2 text-sm text-white/70 hover:text-white transition">{t("الرسائل", "Messages")}</Link>
+                          <Link href="/dashboard/client/settings" onClick={() => setOpen(false)} className="px-3 py-2 text-sm text-white/70 hover:text-white transition">{t("الإعدادات", "Settings")}</Link>
+                        </div>
+                      )}
+                      {status === "authenticated" && session?.user?.role === "FREELANCER" && (
+                        <div className="flex flex-col gap-1">
+                          <Link href="/dashboard/freelancer" onClick={() => setOpen(false)} className="px-3 py-2 text-sm text-white/70 hover:text-white transition">{t("منصة العمل", "Overview")}</Link>
+                          <Link href="/dashboard/freelancer/jobs" onClick={() => setOpen(false)} className="px-3 py-2 text-sm text-white/70 hover:text-white transition">{t("ابحث عن عمل", "Find Work")}</Link>
+                          <Link href="/dashboard/freelancer/tasks" onClick={() => setOpen(false)} className="px-3 py-2 text-sm text-white/70 hover:text-white transition">{t("مهامي", "My Tasks")}</Link>
+                          <Link href="/dashboard/freelancer/messages" onClick={() => setOpen(false)} className="px-3 py-2 text-sm text-white/70 hover:text-white transition">{t("الرسائل", "Messages")}</Link>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   <div className="flex flex-col gap-2">
                     {items.map((it) => (
                       <Link
@@ -168,22 +195,10 @@ export default function Navbar() {
                       </Link>
                     ))}
 
-                    <Link
-                      href="/#request"
-                      onClick={(e) => handleNavClick(e, "#request")}
-                      className="mt-1 block w-full text-center rounded-xl px-3 py-2 text-sm font-semibold text-black"
-                      style={{
-                        background:
-                          "linear-gradient(135deg, var(--shaal-orange), var(--shaal-orange2))",
-                      }}
-                    >
-                      {t("ابدأ الآن", "Get Started")}
-                    </Link>
+                    {/* ... other items ... */}
                   </div>
                 </div>
               </div>
-
-
             )}
           </div>
         </div>

@@ -90,10 +90,10 @@ export default function NavAuth() {
           {initials}
         </div>
 
-        {/* Name (hide on small) */}
-        <div className="hidden lg:block text-left">
-          <div className="text-sm font-semibold leading-4 max-w-[120px] truncate">{displayName}</div>
-          <div className="text-[11px] text-white/60">
+        {/* Name (hide on very small) */}
+        <div className="hidden xs:block text-left">
+          <div className="text-[10px] md:text-sm font-semibold leading-3 md:leading-4 max-w-[80px] md:max-w-[120px] truncate">{displayName}</div>
+          <div className="text-[9px] md:text-[11px] text-white/60">
             {user.role?.toUpperCase() === "CLIENT" ? t("عميل", "Client") :
               user.role?.toUpperCase() === "FREELANCER" ? t("فريلانسر", "Freelancer") :
                 user.role?.toUpperCase() === "ADMIN" ? t("مدير", "Admin") : user.role}
@@ -101,7 +101,7 @@ export default function NavAuth() {
         </div>
 
         {/* caret */}
-        <div className="hidden sm:block text-white/70 text-xs">▾</div>
+        <div className="hidden xs:block text-white/70 text-xs">▾</div>
       </button>
 
       {open && (
