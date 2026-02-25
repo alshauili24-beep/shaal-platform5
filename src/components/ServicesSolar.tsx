@@ -154,38 +154,41 @@ export default function ServicesSolar() {
 
         {/* RIGHT: Solar System */}
         <div
-          className="relative h-[600px] flex items-center justify-center"
+          className="relative h-[400px] md:h-[600px] flex items-center justify-center overflow-hidden"
           onMouseEnter={() => setIsHoveringSystem(true)}
           onMouseLeave={() => setIsHoveringSystem(false)}
         >
           {/* Deep Space Background */}
-          <div className="absolute inset-0 bg-gradient-radial from-[#0a1f26] to-transparent rounded-full opacity-50 blur-3xl transform scale-90" />
+          <div className="absolute inset-0 bg-gradient-radial from-[#0a1f26] to-transparent rounded-full opacity-50 blur-3xl transform scale-75 md:scale-90" />
 
           {/* Center Sun (Logo) */}
           <motion.div
-            className="absolute z-20 w-32 h-32 rounded-full bg-black border border-white/10 flex flex-col items-center justify-center shadow-[0_0_50px_rgba(255,255,255,0.05)]"
+            className="absolute z-20 w-24 h-24 md:w-32 md:h-32 rounded-full bg-black border border-white/10 flex flex-col items-center justify-center shadow-[0_0_50px_rgba(255,255,255,0.05)]"
             whileHover={{ scale: 1.05, boxShadow: "0 0 80px rgba(255,255,255,0.15)" }}
             onClick={() => setActiveId(null)}
           >
-            <div className="text-xl font-black tracking-wider text-white">SHAAL</div>
-            <div className="text-[10px] text-white/40 font-bold tracking-[0.2em] uppercase">Connect</div>
+            <div className="text-lg md:text-xl font-black tracking-wider text-white">SHAAL</div>
+            <div className="text-[8px] md:text-[10px] text-white/40 font-bold tracking-[0.2em] uppercase">Connect</div>
 
             {/* Sun Glow Layers */}
             <div className="absolute inset-0 rounded-full border border-white/5 animate-pulse" />
-            <div className="absolute -inset-4 rounded-full border border-white/5 border-dashed bg-transparent animate-[spin_10s_linear_infinite]" />
+            <div className="absolute -inset-3 md:-inset-4 rounded-full border border-white/5 border-dashed bg-transparent animate-[spin_10s_linear_infinite]" />
           </motion.div>
 
           {/* Orbits & Planets */}
           {services.map((s, idx) => {
             const isActive = activeId === s.id;
+            // Responsive scaling factor
+            const scale = typeof window !== 'undefined' && window.innerWidth < 768 ? 0.6 : 1;
+            const radius = s.orbitRadius * scale;
 
             return (
               <div
                 key={s.id}
                 className="absolute rounded-full border border-white/10 border-dashed flex items-center justify-center transition-all duration-500"
                 style={{
-                  width: s.orbitRadius * 2,
-                  height: s.orbitRadius * 2,
+                  width: radius * 2,
+                  height: radius * 2,
                   borderColor: isActive ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.05)',
                 }}
               >
@@ -197,16 +200,9 @@ export default function ServicesSolar() {
                     duration: s.speedSec,
                     ease: "linear",
                     repeat: Infinity,
-                    // Pause rotation when hovering the system for easier clicking
                     repeatType: "loop"
                   }}
-                  style={{
-                    // Use CSS variable to control play state if framed-motion doesn't support playState easily directly
-                    // Or we can just use simple state but that resets rotation.
-                    // Let's rely on hover scale for interaction instead of stopping rotation which might be jerky
-                  }}
                 >
-                  {/* Counter-rotate Planet so it stays upright? No, let it rotate with orbit for planet feel */}
                   <motion.button
                     onClick={() => setActiveId(s.id)}
                     whileHover={{ scale: 1.5 }}
@@ -215,16 +211,16 @@ export default function ServicesSolar() {
                             ${s.accent === 'orange' ? 'shadow-orange-500/30' : 'shadow-teal-500/30'}
                         `}
                     style={{
-                      width: s.planetSize,
-                      height: s.planetSize,
+                      width: s.planetSize * scale,
+                      height: s.planetSize * scale,
                       background: s.accent === 'orange'
                         ? 'linear-gradient(135deg, #ff8c42, #ff5f6d)'
                         : 'linear-gradient(135deg, #26c485, #0a8f88)',
                     }}
                   >
-                    {/* Label on Hover */}
+                    {/* Label (Hidden on small mobile to avoid clutter, shows on active/hover) */}
                     <div className={`absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[10px] px-2 py-1 rounded-md whitespace-nowrap border border-white/10 pointer-events-none transition-opacity duration-300
-                            ${(isActive || isHoveringSystem) ? 'opacity-100' : 'opacity-0'}
+                            ${(isActive || (isHoveringSystem && scale > 0.7)) ? 'opacity-100' : 'opacity-0'}
                         `}>
                       {t(s.titleAr, s.titleEn)}
                     </div>

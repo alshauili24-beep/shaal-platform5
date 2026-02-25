@@ -70,7 +70,7 @@ export default function Navbar() {
               {/* Brand */}
               <Link
                 href="/"
-                className="flex items-center gap-3 min-w-[220px]"
+                className="flex items-center gap-2 md:gap-3 flex-1 md:flex-initial min-w-0"
               >
                 {/* ضع شعارك في public/logo.png */}
                 <div className="relative h-11 w-11 rounded-2xl overflow-hidden border border-white/10 bg-white/5">
@@ -84,15 +84,15 @@ export default function Navbar() {
                   />
                 </div>
 
-                <div className="leading-tight">
-                  <div className="flex items-baseline gap-2">
-                    <span className="font-black tracking-wide text-white">SHAAL</span>
-                    <span className="text-white/60 text-sm">|</span>
-                    <span className="font-semibold text-white/80">
+                <div className="leading-tight truncate">
+                  <div className="flex items-baseline gap-1.5 md:gap-2">
+                    <span className="font-black tracking-wide text-white text-sm md:text-base">SHAAL</span>
+                    <span className="text-white/60 text-sm hidden xs:inline">|</span>
+                    <span className="font-semibold text-white/80 text-xs md:text-sm truncate">
                       {t("شعل للحلول الذكية", "SHAAL Smart Solutions")}
                     </span>
                   </div>
-                  <div className="text-xs text-white/60">
+                  <div className="text-[10px] md:text-xs text-white/60 truncate">
                     {t(
                       "منصة عمانية تربط العملاء بالفريلانسرز",
                       "An Omani platform connecting clients & freelancers"
