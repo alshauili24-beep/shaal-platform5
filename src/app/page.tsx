@@ -193,16 +193,28 @@ export default function Home() {
 
             {/* Center: Social Icons */}
             <div className="flex items-center gap-6 order-1 md:order-2">
-              <a href="#" className="text-white/40 hover:text-[var(--shaal-orange)] transition transform hover:scale-110">
+              <a
+                href="https://www.instagram.com/shaalss.om?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/40 hover:text-[var(--shaal-orange)] transition transform hover:scale-110"
+              >
                 <Instagram className="w-5 h-5 md:w-6 md:h-6" />
               </a>
-              <a href="#" className="text-white/40 hover:text-[var(--shaal-orange)] transition transform hover:scale-110">
+              <a
+                href="https://x.com/shalmarkting"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/40 hover:text-[var(--shaal-orange)] transition transform hover:scale-110"
+              >
                 <Twitter className="w-5 h-5 md:w-6 md:h-6" />
               </a>
-              <a href="#" className="text-white/40 hover:text-[var(--shaal-orange)] transition transform hover:scale-110">
-                <Linkedin className="w-5 h-5 md:w-6 md:h-6" />
-              </a>
-              <a href="#" className="text-white/40 hover:text-[var(--shaal-orange)] transition transform hover:scale-110">
+              <a
+                href="https://youtube.com/channel/UChb_lqab2QNFyNmMtSowcKA?si=itcoFAk9JjK0iq3j"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/40 hover:text-[var(--shaal-orange)] transition transform hover:scale-110"
+              >
                 <Youtube className="w-5 h-5 md:w-6 md:h-6" />
               </a>
             </div>
